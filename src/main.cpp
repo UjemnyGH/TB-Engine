@@ -120,7 +120,7 @@ void InitScene()
 
 void DisplayScene()
 {
-    glm::mat4x4 vi = glm::lookAt(pos, (glm::vec3)rot, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4x4 vi = glm::lookAt(pos, rot, glm::vec3(0.0f, 1.0f, 0.0f));
 
     glm::mat4x4 mod = glm::mat4x4(1.0);
 
@@ -128,6 +128,8 @@ void DisplayScene()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::mat4x4 pvm = proj * vi * mod;
+
+    cb[0].SetScale(0.5f, 0.5f, 0.5f);
 
     cb[0].draw(pvm);
     cb[1].draw(pvm);

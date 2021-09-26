@@ -24,6 +24,17 @@ private:
         -1.0f, -1.0f, -1.0f
     };
 
+    const float scaleConst[24] = {
+        1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f
+    };
+
     unsigned int indices[36] = {
         0, 1, 2,
         1, 2, 3,
@@ -47,5 +58,6 @@ public:
     void SetScale(float scale);
     void SetScale(float x, float y, float z);
     void SetScale(glm::vec3 scale);
+    void SetColor(float color[], unsigned int colorSizeof);
     void deleteCube();
 };

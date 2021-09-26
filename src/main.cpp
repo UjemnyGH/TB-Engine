@@ -14,61 +14,93 @@
 //Cube cb;
 Mesh mh;
 
-float zNear = 0.001f, zFar = 1000.0f;
+float zNear = 0.001f;
+float zFar = 1000.0f;
 
 glm::vec3 pos = glm::vec3(0.0f, 0.0f, -3.0f);
 glm::vec3 rot;
 glm::mat4x4 proj;
+float scale = 1.0f;
 
 void keyboard(unsigned char key, int x, int y)
 {
     switch (key)
     {
     case 'w':
-        pos.y += 0.3f;
+        pos.y += 0.1f;
         break;
     
     case 's':
-        pos.y -= 0.3f;
+        pos.y -= 0.1f;
         break;
 
     case 'a':
-        pos.x -= 0.3f;
+        pos.x -= 0.1f;
         break;
 
     case 'd':
-        pos.x += 0.3f;
+        pos.x += 0.1f;
+        break;
+
+    case '+':
+        scale += 0.01f;
+        break;
+
+    case '-':
+        scale -= 0.01f;
         break;
     }
 }
 
-float vertices[24] = {
+float color[] = {
     1.0f, 1.0f, 1.0f,
-    1.0f, -1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f,
-    -1.0f, -1.0f, 1.0f,
-    1.0f, 1.0f, -1.0f,
-    1.0f, -1.0f, -1.0f,
-    -1.0f, 1.0f, -1.0f,
-    -1.0f, -1.0f, -1.0f
-};
-
-unsigned int indices[36] = {
-    0, 1, 2,
-    1, 2, 3,
-    4, 5, 6,
-    5, 6, 7,
-    0, 2, 4,
-    2, 4, 6,
-    1, 3, 5,
-    3, 5, 7,
-    0, 1, 4,
-    1, 4, 5,
-    2, 3, 6,
-    3, 6, 7
-};
-
-float color[24] = {
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
     1.0f, 1.0f, 1.0f,
     1.0f, 1.0f, 1.0f,
     1.0f, 1.0f, 1.0f,
@@ -131,7 +163,7 @@ void InitScene()
 
     //cb.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color, sizeof(color));
 
-    mh.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testCube.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
+    mh.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testLPBall.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
 }
 
 void DisplayScene()
@@ -142,6 +174,8 @@ void DisplayScene()
 
     mod = glm::rotate(mod, pos.y, glm::vec3(0.0f, 1.0f, 0.0f));
     mod = glm::rotate(mod, pos.x, glm::vec3(1.0f, 0.0f, 0.0f));
+
+    mod = glm::scale(mod, glm::vec3(scale, scale, scale));
 
     glClearColor(0.2f, 0.8f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -170,15 +204,9 @@ void ReshapeScene(int w, int h)
 {
     glViewport(0, 0, w, h);
 
-    float aspect = 1.0f;
-    float fovy = 10.0f;
+    float fov = 90.0f;
 
-    if(h > 0)
-    {
-        aspect = w / static_cast<float>(h);
-    }
-
-    proj = glm::perspective(fovy, aspect, zNear, zFar);
+    proj = glm::perspectiveFov(fov, static_cast<float>(w), static_cast<float>(h), zNear, zFar);
 }
 
 void DeleteScene()

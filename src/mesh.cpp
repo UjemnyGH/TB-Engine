@@ -91,7 +91,7 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
 
             std::stringstream ss(line.c_str() + 2);
 
-            unsigned int indX, texX, norX, indY, texY, norY, indZ, texZ, norZ, indW, texW, norW;
+            unsigned int indX = 0, texX = 0, norX = 0, indY = 0, texY = 0, norY = 0, indZ = 0, texZ = 0, norZ = 0, indW = 0, texW = 0, norW = 0;
 
             ss >> indX >> texX >> norX >> indY >> texY >> norY >> indZ >> texZ >> norZ >> indW >> texW >> norW;
 
@@ -137,7 +137,7 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
     vbo[1].bindVbo(color, colorSizeof, 3, 1, drawType);
 
     ebo.create();
-    ebo.bindEbo(indices.data(), indices.size(), drawType);
+    ebo.bindEbo(indices.data(), sizeof(int) * indices.size(), drawType);
 
     vao.unbindVao();
 
@@ -146,7 +146,7 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
         std::cout << "V: " << vertices[i * 3] << ", " << vertices[i * 3 + 1] << ", " << vertices[i * 3 + 2] << std::endl;
     }
 
-    for(int i = 0; i < indices.size(); i++)
+    for(int i = 0; i < indices.size() / 3; i++)
     {
         std::cout << "In: " << indices[i * 3] << ", " << indices[i * 3 + 1] << ", " << indices[i * 3 + 2] << std::endl;
     }
@@ -159,7 +159,7 @@ void Mesh::draw(glm::mat4x4 pvm)
 
     glUniformMatrix4fv(glGetUniformLocation(sh.ID, "pvm"), 1, GL_FALSE, glm::value_ptr(pvm));
 
-    glDrawElements(GL_TRIANGLES, vertices.size(), GL_UNSIGNED_INT, NULL);
+    glDrawElements(GL_TRIANGLES, vertices.size() * 2, GL_UNSIGNED_INT, NULL);
 
     vao.unbindVao();
     glUseProgram(0);

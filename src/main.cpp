@@ -9,14 +9,38 @@
 #include "shaders.h"
 #include "buffers.h"
 #include "cube.h"
+#include "mesh.h"
 
-Cube cb[2];
+//Cube cb;
+Mesh mh;
 
 float zNear = 0.001f, zFar = 1000.0f;
 
 glm::vec3 pos = glm::vec3(0.0f, 0.0f, -3.0f);
 glm::vec3 rot;
 glm::mat4x4 proj;
+
+void keyboard(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'w':
+        pos.y += 0.3f;
+        break;
+    
+    case 's':
+        pos.y -= 0.3f;
+        break;
+
+    case 'a':
+        pos.x -= 0.3f;
+        break;
+
+    case 'd':
+        pos.x += 0.3f;
+        break;
+    }
+}
 
 float vertices[24] = {
     1.0f, 1.0f, 1.0f,
@@ -55,17 +79,6 @@ float color[24] = {
     1.0f, 1.0f, 1.0f
 };
 
-float color2[24] = {
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f
-};
-
 void InitScene();
 void DisplayScene();
 void ReshapeScene(int w, int h);
@@ -96,6 +109,8 @@ int main(int argc, char** argv)
         return -2;
     }
 
+    glutKeyboardFunc(keyboard);
+
     glGetError();
 
     InitScene();
@@ -114,25 +129,37 @@ void InitScene()
 {
     glEnable(GL_DEPTH_TEST);
 
-    cb[0].init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color, sizeof(color));
-    cb[1].init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color2, sizeof(color2));
+    //cb.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color, sizeof(color));
+
+    mh.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testCube.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
 }
 
 void DisplayScene()
 {
-    glm::mat4x4 vi = glm::lookAt(pos, rot, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4x4 vi = glm::lookAt(glm::vec3(0.0f, 0.0f, -3.0f), rot, glm::vec3(0.0f, 1.0f, 0.0f));
 
     glm::mat4x4 mod = glm::mat4x4(1.0);
+
+    mod = glm::rotate(mod, pos.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    mod = glm::rotate(mod, pos.x, glm::vec3(1.0f, 0.0f, 0.0f));
 
     glClearColor(0.2f, 0.8f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::mat4x4 pvm = proj * vi * mod;
 
-    cb[0].SetScale(0.5f, 0.5f, 0.5f);
+    std::random_device rd;
 
-    cb[0].draw(pvm);
-    cb[1].draw(pvm);
+    for(int i = 0; i < 8; i++)
+    {
+        color[i] = (rd() % 100) / 100.0f;
+    }
+
+    //cb.SetColor(color, sizeof(color));
+
+    //cb.draw(pvm);
+
+    mh.draw(pvm);
 
     glutSwapBuffers();
 
@@ -156,6 +183,6 @@ void ReshapeScene(int w, int h)
 
 void DeleteScene()
 {
-    cb[0].deleteCube();
-    cb[1].deleteCube();
+    //cb.deleteCube();
+    mh.deleteMesh();
 }

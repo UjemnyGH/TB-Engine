@@ -93,13 +93,11 @@ void Cube::draw(glm::mat4x4 pvm)
 
     glUniformMatrix4fv(glGetUniformLocation(sh.ID, "pvm"), 1, GL_FALSE, glm::value_ptr(pvm));
 
-    glDrawElements(GL_TRIANGLES, sizeof(vertices) / 8, GL_UNSIGNED_INT, NULL);
+    glDrawElements(GL_TRIANGLES, sizeof(vertices) / 2, GL_UNSIGNED_INT, NULL);
 
-    vao.bindVao();
+    vao.unbindVao();
     glUseProgram(0);
 }
-
-
 
 void Cube::deleteCube()
 {

@@ -99,7 +99,7 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
             indices.push_back(indY - 1);
             indices.push_back(indZ - 1);
 
-            indices.push_back(indY - 1);
+            indices.push_back(indX - 1);
             indices.push_back(indZ - 1);
             indices.push_back(indW - 1);
 
@@ -107,7 +107,7 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
             textureIndices.push_back(texY - 1);
             textureIndices.push_back(texZ - 1);
 
-            textureIndices.push_back(texY - 1);
+            textureIndices.push_back(texX - 1);
             textureIndices.push_back(texZ - 1);
             textureIndices.push_back(texW - 1);
 
@@ -115,7 +115,7 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
             normalsIndices.push_back(norY - 1);
             normalsIndices.push_back(norZ - 1);
  
-            normalsIndices.push_back(norY - 1);
+            normalsIndices.push_back(norX - 1);
             normalsIndices.push_back(norZ - 1);
             normalsIndices.push_back(norW - 1);
 

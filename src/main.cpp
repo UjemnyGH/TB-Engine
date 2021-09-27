@@ -163,7 +163,7 @@ void InitScene()
 
     //cb.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color, sizeof(color));
 
-    mh.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testLPBall.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
+    mh.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testShape.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
 }
 
 void DisplayScene()

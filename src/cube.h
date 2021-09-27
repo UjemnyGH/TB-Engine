@@ -24,7 +24,29 @@ private:
         -1.0f, -1.0f, -1.0f
     };
 
-    const float scaleConst[24] = {
+    float scaleC[24] = {
+        1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f
+    };
+
+    float positionC[24] = {
+        1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f
+    };
+
+    const float psrConst[24] = {
         1.0f, 1.0f, 1.0f,
         1.0f, -1.0f, 1.0f,
         -1.0f, 1.0f, 1.0f,
@@ -51,13 +73,13 @@ private:
     };
 
 public:
-    void init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], const unsigned long colorSizeof);
+    void init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof);
     void draw(glm::mat4x4 pvm);
     void SetPosition(float x, float y, float z);
     void SetPosition(glm::vec3 position);
     void SetScale(float scale);
     void SetScale(float x, float y, float z);
     void SetScale(glm::vec3 scale);
-    void SetColor(float color[], unsigned int colorSizeof);
+    void SetColor(float color[], size_t colorSizeof);
     void deleteCube();
 };

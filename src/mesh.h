@@ -17,6 +17,8 @@ private:
     std::vector<float> textureVertices;
     std::vector<float> uvNormals;
 
+    std::vector<float> verticesConst;
+
     std::vector<unsigned int> indices;
     std::vector<unsigned int> textureIndices;
     std::vector<unsigned int> normalsIndices;
@@ -29,5 +31,6 @@ public:
     void SetScale(float scale);
     void SetScale(float x, float y, float z);
     void SetScale(glm::vec3 scale);
+    void SetColor(float color[], size_t colorSize);
     void deleteMesh();
 };

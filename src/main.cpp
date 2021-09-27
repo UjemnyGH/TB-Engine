@@ -11,11 +11,13 @@
 #include "cube.h"
 #include "mesh.h"
 
-//Cube cb;
-Mesh mh;
+const int cubeCount = 10;
+
+Cube cb[cubeCount];
+//Mesh mh;
 
 float zNear = 0.001f;
-float zFar = 1000.0f;
+float zFar = 10000.0f;
 
 glm::vec3 pos = glm::vec3(0.0f, 0.0f, -3.0f);
 glm::vec3 rot;
@@ -161,9 +163,12 @@ void InitScene()
 {
     glEnable(GL_DEPTH_TEST);
 
-    //cb.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color, sizeof(color));
+    for(int i = 0; i < cubeCount; i++)
+    {
+        cb[i].init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color, sizeof(color));
+    }
 
-    mh.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testShape.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
+    //mh.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testLPBall.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
 }
 
 void DisplayScene()
@@ -189,11 +194,15 @@ void DisplayScene()
         color[i] = (rd() % 100) / 100.0f;
     }
 
-    //cb.SetColor(color, sizeof(color));
+    for(int i = 0; i < cubeCount; i++)
+    {
+        cb[i].SetPosition(static_cast<float>(i * 3) - (cubeCount * 3) / 2, 0.0f, 0.0f);
+        cb[i].SetColor(color, sizeof(color));
 
-    //cb.draw(pvm);
+        cb[i].draw(pvm);
+    }
 
-    mh.draw(pvm);
+    //mh.draw(pvm);
 
     glutSwapBuffers();
 
@@ -211,6 +220,9 @@ void ReshapeScene(int w, int h)
 
 void DeleteScene()
 {
-    //cb.deleteCube();
-    mh.deleteMesh();
+    for(int i = 0; i < cubeCount; i++)
+    {
+        cb[i].deleteCube();
+    }
+    //mh.deleteMesh();
 }

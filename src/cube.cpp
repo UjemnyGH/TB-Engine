@@ -7,7 +7,7 @@
 #include "shaders.h"
 #include "buffers.h"
 
-void Cube::init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], const unsigned long colorSizeof)
+void Cube::init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof)
 {
     sh = Shader(vertName, fragName);
 
@@ -28,12 +28,40 @@ void Cube::init(const std::string & fragName, const std::string & vertName, cons
 
 void Cube::SetPosition(float x, float y, float z)
 {
-    
+    vao.bindVao();
+
+    for(int i = 0; i < sizeof(vertices) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scaleC[i * 3] + ((x * positionC[i * 3])  * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = scaleC[(i * 3) + 1] + ((y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = scaleC[(i * 3) + 2] + ((z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices, sizeof(vertices), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
 }
 
 void Cube::SetPosition(glm::vec3 position)
 {
+    vao.bindVao();
 
+    for(int i = 0; i < sizeof(vertices) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scaleC[i * 3] + ((position.x * positionC[i * 3])  * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = scaleC[(i * 3) + 1] + ((position.y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = scaleC[(i * 3) + 2] + ((position.z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices, sizeof(vertices), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
 }
 
 void Cube::SetScale(float scale)
@@ -42,7 +70,9 @@ void Cube::SetScale(float scale)
 
     for(int i = 0; i < sizeof(vertices) / 4; i++)
     {
-        vertices[i] = scale * scaleConst[i];
+        scaleC[i] = psrConst[i];
+
+        vertices[i] = scale * scaleC[i];
     }
 
     vbo[0].bindVbo(vertices, sizeof(vertices), 3, 0, GL_DYNAMIC_DRAW);
@@ -55,9 +85,13 @@ void Cube::SetScale(float x, float y, float z)
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
     {
-        vertices[i * 3] = x * scaleConst[i * 3];
-        vertices[(i * 3) + 1] = y * scaleConst[(i * 3) + 1];
-        vertices[(i * 3) + 2] = z * scaleConst[(i * 3) + 2];
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = x * scaleC[i * 3];
+        vertices[(i * 3) + 1] = y * scaleC[(i * 3) + 1];
+        vertices[(i * 3) + 2] = z * scaleC[(i * 3) + 2];
     }
 
     vbo[0].bindVbo(vertices, sizeof(vertices), 3, 0, GL_DYNAMIC_DRAW);
@@ -70,16 +104,20 @@ void Cube::SetScale(glm::vec3 scale)
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
     {
-        vertices[i * 3] = scale.x * scaleConst[i * 3];
-        vertices[(i * 3) + 1] = scale.y * scaleConst[(i * 3) + 1];
-        vertices[(i * 3) + 2] = scale.z * scaleConst[(i * 3) + 2];
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scale.x * scaleC[i * 3];
+        vertices[(i * 3) + 1] = scale.y * scaleC[(i * 3) + 1];
+        vertices[(i * 3) + 2] = scale.z * scaleC[(i * 3) + 2];
     }
 
     vbo[0].bindVbo(vertices, sizeof(vertices), 3, 0, GL_DYNAMIC_DRAW);
     vao.unbindVao();
 }
 
-void Cube::SetColor(float color[], unsigned int colorSizeof)
+void Cube::SetColor(float color[], size_t colorSizeof)
 {
     vao.bindVao();
     vbo[1].bindVbo(color, colorSizeof, 3, 1, GL_DYNAMIC_DRAW);

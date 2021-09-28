@@ -17,7 +17,9 @@ private:
     std::vector<float> textureVertices;
     std::vector<float> uvNormals;
 
-    std::vector<float> verticesConst;
+    std::vector<float> psrConst;
+    std::vector<float> positionC;
+    std::vector<float> scaleC;
 
     std::vector<unsigned int> indices;
     std::vector<unsigned int> textureIndices;

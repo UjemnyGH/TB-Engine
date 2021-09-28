@@ -51,6 +51,41 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
             vertices.push_back(x);
             vertices.push_back(y);
             vertices.push_back(z);
+
+            if(x > 0)
+            {
+                psrConst.push_back(1);
+            }
+            else
+            {
+                psrConst.push_back(-1);
+            }
+
+            if(y > 0)
+            {
+                psrConst.push_back(1);
+            }
+            else
+            {
+                psrConst.push_back(-1);
+            }
+
+            if(z > 0)
+            {
+                psrConst.push_back(1);
+            }
+            else
+            {
+                psrConst.push_back(-1);
+            }
+
+            scaleC.push_back(x);
+            scaleC.push_back(y);
+            scaleC.push_back(z);
+
+            positionC.push_back(x);
+            positionC.push_back(y);
+            positionC.push_back(z);
         }
         else if(line.find("vt ") == 0)
         {
@@ -118,10 +153,6 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
             normalsIndices.push_back(norX - 1);
             normalsIndices.push_back(norZ - 1);
             normalsIndices.push_back(norW - 1);
-
-            std::cout << "X: " << indX << ", "  << texX << ", "  << norX << ",Y: "  << indY << ", "  << texY << ", "  << norY << ",Z: "  << indZ << ", "  << texZ << ", "  << norZ << std::endl;
-
-            std::cout << "Slash num: " << slashNum << " " << lastSlashIX << std::endl;
         }
     }
 
@@ -140,16 +171,6 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
     ebo.bindEbo(indices.data(), sizeof(int) * indices.size(), drawType);
 
     vao.unbindVao();
-
-    for(int i = 0; i < vertices.size() / 3; i++)
-    {
-        std::cout << "V: " << vertices[i * 3] << ", " << vertices[i * 3 + 1] << ", " << vertices[i * 3 + 2] << std::endl;
-    }
-
-    for(int i = 0; i < indices.size() / 3; i++)
-    {
-        std::cout << "In: " << indices[i * 3] << ", " << indices[i * 3 + 1] << ", " << indices[i * 3 + 2] << std::endl;
-    }
 }
 
 void Mesh::draw(glm::mat4x4 pvm)
@@ -164,6 +185,107 @@ void Mesh::draw(glm::mat4x4 pvm)
     vao.unbindVao();
     glUseProgram(0);
 }
+
+void Mesh::SetPosition(float x, float y, float z)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < (sizeof(float) * vertices.size()) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scaleC[i * 3] + ((x * positionC[i * 3]) * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = scaleC[(i * 3) + 1] + ((y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = scaleC[(i * 3) + 2] + ((z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void Mesh::SetPosition(glm::vec3 pos)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < (sizeof(float) * vertices.size()) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scaleC[i * 3] + ((pos.x * positionC[i * 3]) * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = scaleC[(i * 3) + 1] + ((pos.y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = scaleC[(i * 3) + 2] + ((pos.z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void Mesh::SetScale(float scale)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < (sizeof(float) * vertices.size()) / 4; i++)
+    {
+        scaleC[i] = psrConst[i];
+
+        vertices[i] = scale * scaleC[i];
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void Mesh::SetScale(float x, float y, float z)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < (sizeof(float) * vertices.size()) / 12; i++)
+    {
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = x * scaleC[i * 3];
+        vertices[(i * 3) + 1] = y * scaleC[(i * 3) + 1];
+        vertices[(i * 3) + 2] = z * scaleC[(i * 3) + 2];
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void Mesh::SetScale(glm::vec3 scale)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < (sizeof(float) * vertices.size()) / 12; i++)
+    {
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scale.x * scaleC[i * 3];
+        vertices[(i * 3) + 1] = scale.y * scaleC[(i * 3) + 1];
+        vertices[(i * 3) + 2] = scale.z * scaleC[(i * 3) + 2];
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void Mesh::SetColor(float color[], size_t colorSize)
+{
+    vao.bindVao();
+
+    vbo[1].bindVbo(color, colorSize, 3, 1, GL_DYNAMIC_DRAW);
+
+    vao.unbindVao();
+}
+
 
 void Mesh::deleteMesh()
 {

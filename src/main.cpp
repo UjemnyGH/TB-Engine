@@ -6,15 +6,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <random>
+#include <future>
 #include "shaders.h"
 #include "buffers.h"
 #include "cube.h"
 #include "mesh.h"
 
-const int cubeCount = 10;
+const int cubeCount = 3;
 
-Cube cb[cubeCount];
-//Mesh mh;
+Cube ground;
+//Cube cb[cubeCount];
+Mesh mh[cubeCount];
 
 float zNear = 0.001f;
 float zFar = 10000.0f;
@@ -54,7 +56,7 @@ void keyboard(unsigned char key, int x, int y)
     }
 }
 
-float color[] = {
+float color[512] = {
     1.0f, 1.0f, 1.0f,
     1.0f, 1.0f, 1.0f,
     1.0f, 1.0f, 1.0f,
@@ -113,10 +115,35 @@ float color[] = {
     1.0f, 1.0f, 1.0f
 };
 
+float grassColor[24] = {
+    0.0f, 0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f
+};
+
 void InitScene();
 void DisplayScene();
 void ReshapeScene(int w, int h);
 void DeleteScene();
+
+void mainLoop()
+{
+
+    while (true)
+    {
+        std::random_device rd;
+
+        for(int i = 0; i < 512; i++)
+        {
+            color[i] = (rd() % 100) / 100.0f;
+        }
+    }
+}
 
 int main(int argc, char** argv)
 {
@@ -149,6 +176,8 @@ int main(int argc, char** argv)
 
     InitScene();
 
+    std::future<void> mainLoopThread = std::async(mainLoop);
+
     glutDisplayFunc(DisplayScene);
     glutReshapeFunc(ReshapeScene);
     
@@ -165,10 +194,11 @@ void InitScene()
 
     for(int i = 0; i < cubeCount; i++)
     {
-        cb[i].init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color, sizeof(color));
+        //cb[i].init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color, sizeof(color));
+        mh[i].init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testLPBall2.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
+        ground.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, grassColor, sizeof(grassColor));
     }
 
-    //mh.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testLPBall.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
 }
 
 void DisplayScene()
@@ -187,22 +217,23 @@ void DisplayScene()
 
     glm::mat4x4 pvm = proj * vi * mod;
 
-    std::random_device rd;
-
-    for(int i = 0; i < 8; i++)
-    {
-        color[i] = (rd() % 100) / 100.0f;
-    }
-
     for(int i = 0; i < cubeCount; i++)
     {
-        cb[i].SetPosition(static_cast<float>(i * 3) - (cubeCount * 3) / 2, 0.0f, 0.0f);
-        cb[i].SetColor(color, sizeof(color));
+        //cb[i].SetPosition(static_cast<float>(i * 3) - (cubeCount * 3) / 2, 0.0f, 0.0f);
+        //cb[i].SetColor(color, sizeof(color));
 
-        cb[i].draw(pvm);
+        //cb[i].draw(pvm);
+
+        mh[i].SetPosition(static_cast<float>(i * 3) - (cubeCount * 3) / 2, 1.0f, 0.0f);
+        mh[i].SetColor(color, sizeof(color));
+        
+        mh[i].draw(pvm);
     }
 
-    //mh.draw(pvm);
+    ground.SetScale(10.0f, 0.1f, 10.0f);
+
+    ground.draw(pvm);
+
 
     glutSwapBuffers();
 
@@ -213,7 +244,7 @@ void ReshapeScene(int w, int h)
 {
     glViewport(0, 0, w, h);
 
-    float fov = 90.0f;
+    float fov = 70.0f;
 
     proj = glm::perspectiveFov(fov, static_cast<float>(w), static_cast<float>(h), zNear, zFar);
 }
@@ -222,7 +253,7 @@ void DeleteScene()
 {
     for(int i = 0; i < cubeCount; i++)
     {
-        cb[i].deleteCube();
+        //cb[i].deleteCube();
+        mh[i].deleteMesh();
     }
-    //mh.deleteMesh();
 }

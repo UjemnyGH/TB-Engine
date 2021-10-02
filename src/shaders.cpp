@@ -4,7 +4,7 @@
 #include <fstream>
 #include "shaders.h"
 
-unsigned int LoadShader(const int & type, const std::string & name)
+unsigned int tbe::LoadShader(const int & type, const std::string & name)
 {
     std::ifstream f;
     
@@ -37,7 +37,7 @@ unsigned int LoadShader(const int & type, const std::string & name)
     return shader;
 }
 
-Shader::Shader(const std::string & vertName, const std::string & fragName)
+tbe::TB_Shader::TB_Shader(const std::string & vertName, const std::string & fragName)
 {
     ID = glCreateProgram();
     glAttachShader(ID, LoadShader(GL_VERTEX_SHADER, vertName));

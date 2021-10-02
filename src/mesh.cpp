@@ -6,26 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "mesh.h"
 
-/*class Mesh
-{
-private:
-    Vao vao;
-    Vbo vbo[2];
-    Ebo ebo;
-    Shader sh;
-
-public:
-    void init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], const unsigned long colorSizeof);
-    void draw(glm::mat4x4 pvm);
-    void SetPosition(float x, float y, float z);
-    void SetPosition(glm::vec3 pos);
-    void SetScale(float scale);
-    void SetScale(float x, float y, float z);
-    void SetScale(glm::vec3 scale);
-    void deleteMesh();
-};*/
-
-void Mesh::init(const std::string & fragName, const std::string & vertName, const std::string & meshName, const int drawType, const float color[], const unsigned long colorSizeof)
+void tbe::TB_Mesh::init(const std::string & fragName, const std::string & vertName, const std::string & meshName, const int drawType, const float color[], const unsigned long colorSizeof)
 {
     std::ifstream f;
     
@@ -173,7 +154,7 @@ void Mesh::init(const std::string & fragName, const std::string & vertName, cons
     vao.unbindVao();
 }
 
-void Mesh::draw(glm::mat4x4 pvm)
+void tbe::TB_Mesh::draw(glm::mat4x4 pvm)
 {
     vao.bindVao();
     glUseProgram(sh.ID);
@@ -186,7 +167,7 @@ void Mesh::draw(glm::mat4x4 pvm)
     glUseProgram(0);
 }
 
-void Mesh::SetPosition(float x, float y, float z)
+void tbe::TB_Mesh::SetPosition(float x, float y, float z)
 {
     vao.bindVao();
 
@@ -205,7 +186,7 @@ void Mesh::SetPosition(float x, float y, float z)
     vao.unbindVao();
 }
 
-void Mesh::SetPosition(glm::vec3 pos)
+void tbe::TB_Mesh::SetPosition(glm::vec3 pos)
 {
     vao.bindVao();
 
@@ -224,7 +205,7 @@ void Mesh::SetPosition(glm::vec3 pos)
     vao.unbindVao();
 }
 
-void Mesh::SetScale(float scale)
+void tbe::TB_Mesh::SetScale(float scale)
 {
     vao.bindVao();
 
@@ -239,7 +220,7 @@ void Mesh::SetScale(float scale)
     vao.unbindVao();
 }
 
-void Mesh::SetScale(float x, float y, float z)
+void tbe::TB_Mesh::SetScale(float x, float y, float z)
 {
     vao.bindVao();
 
@@ -258,7 +239,7 @@ void Mesh::SetScale(float x, float y, float z)
     vao.unbindVao();
 }
 
-void Mesh::SetScale(glm::vec3 scale)
+void tbe::TB_Mesh::SetScale(glm::vec3 scale)
 {
     vao.bindVao();
 
@@ -277,7 +258,7 @@ void Mesh::SetScale(glm::vec3 scale)
     vao.unbindVao();
 }
 
-void Mesh::SetColor(float color[], size_t colorSize)
+void tbe::TB_Mesh::SetColor(float color[], size_t colorSize)
 {
     vao.bindVao();
 
@@ -287,7 +268,7 @@ void Mesh::SetColor(float color[], size_t colorSize)
 }
 
 
-void Mesh::deleteMesh()
+void tbe::TB_Mesh::deleteMesh()
 {
     vao.deleteVao();
     vbo->deleteVbo();

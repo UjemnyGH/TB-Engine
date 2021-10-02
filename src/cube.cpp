@@ -7,7 +7,7 @@
 #include "shaders.h"
 #include "buffers.h"
 
-void Cube::init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof)
+void tbe::TB_Cube::init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof)
 {
     sh = Shader(vertName, fragName);
 
@@ -26,7 +26,7 @@ void Cube::init(const std::string & fragName, const std::string & vertName, cons
     vao.unbindVao();
 }
 
-void Cube::SetPosition(float x, float y, float z)
+void tbe::TB_Cube::SetPosition(float x, float y, float z)
 {
     vao.bindVao();
 
@@ -45,7 +45,7 @@ void Cube::SetPosition(float x, float y, float z)
     vao.unbindVao();
 }
 
-void Cube::SetPosition(glm::vec3 position)
+void tbe::TB_Cube::SetPosition(glm::vec3 position)
 {
     vao.bindVao();
 
@@ -64,7 +64,7 @@ void Cube::SetPosition(glm::vec3 position)
     vao.unbindVao();
 }
 
-void Cube::SetScale(float scale)
+void tbe::TB_Cube::SetScale(float scale)
 {
     vao.bindVao();
 
@@ -79,7 +79,7 @@ void Cube::SetScale(float scale)
     vao.unbindVao();
 }
 
-void Cube::SetScale(float x, float y, float z)
+void tbe::TB_Cube::SetScale(float x, float y, float z)
 {
     vao.bindVao();
 
@@ -98,7 +98,7 @@ void Cube::SetScale(float x, float y, float z)
     vao.unbindVao();
 }
 
-void Cube::SetScale(glm::vec3 scale)
+void tbe::TB_Cube::SetScale(glm::vec3 scale)
 {
     vao.bindVao();
 
@@ -117,14 +117,14 @@ void Cube::SetScale(glm::vec3 scale)
     vao.unbindVao();
 }
 
-void Cube::SetColor(float color[], size_t colorSizeof)
+void tbe::TB_Cube::SetColor(float color[], size_t colorSizeof)
 {
     vao.bindVao();
     vbo[1].bindVbo(color, colorSizeof, 3, 1, GL_DYNAMIC_DRAW);
     vao.unbindVao();
 }
 
-void Cube::draw(glm::mat4x4 pvm)
+void tbe::TB_Cube::draw(glm::mat4x4 pvm)
 {
     vao.bindVao();
     glUseProgram(sh.ID);
@@ -137,7 +137,7 @@ void Cube::draw(glm::mat4x4 pvm)
     glUseProgram(0);
 }
 
-void Cube::deleteCube()
+void tbe::TB_Cube::deleteCube()
 {
     vao.deleteVao();
     vbo->deleteVbo();

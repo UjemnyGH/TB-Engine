@@ -1,35 +1,52 @@
 #pragma once
 
-class Vao
+namespace tbe
 {
-private:
-    unsigned int ID;
-public:
-    Vao();
-    void create();
-    void bindVao();
-    void unbindVao();
-    void deleteVao();
-};
+    class TB_Vao
+    {
+    private:
+        unsigned int ID;
+    public:
+        TB_Vao();
+        //creating vertex array object
+        void create();
+        //bind vertex array object
+        void bindVao();
+        //unbind vertex array object (glBindVertexArray(0))
+        void unbindVao();
+        //delete vertex array object
+        void deleteVao();
+    };
 
-class Vbo
-{
-private:
-    unsigned int ID;
-public:
-    Vbo();
-    void create();
-    void bindVbo(const float table[], const unsigned long tableSize, const unsigned short dimensions, const unsigned int index, const int drawType);
-    void deleteVbo();
-};
+    class TB_Vbo
+    {
+    private:
+        unsigned int ID;
+    public:
+        TB_Vbo();
+        //create vertex buffer object
+        void create();
+        //bind vertex buffer object
+        void bindVbo(const float table[], const unsigned long tableSize, const unsigned short dimensions, const unsigned int index, const int drawType);
+        //delete vertex buffer object
+        void deleteVbo();
+    };
 
-class Ebo
-{
-private:
-    unsigned int ID;
-public:
-    Ebo();
-    void create();
-    void bindEbo(const unsigned int table[], const unsigned long tableSize, const int drawType);
-    void deleteEbo();
-};
+    class TB_Ebo
+    {
+    private:
+        unsigned int ID;
+    public:
+        TB_Ebo();
+        //create element buffer object
+        void create();
+        //bind element buffer object
+        void bindEbo(const unsigned int table[], const unsigned long tableSize, const int drawType);
+        //delete element buffer object
+        void deleteEbo();
+    };
+
+    typedef TB_Vao Vao;
+    typedef TB_Vbo Vbo;
+    typedef TB_Ebo Ebo;
+}

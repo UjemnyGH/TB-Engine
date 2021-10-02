@@ -4,114 +4,35 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <iostream>
 #include <random>
 #include <future>
+#include <math.h>
 #include "shaders.h"
 #include "buffers.h"
 #include "cube.h"
 #include "mesh.h"
+#include "player/camera.h"
+#include "time.h"
 
 const int cubeCount = 3;
 
-Cube ground;
-//Cube cb[cubeCount];
-Mesh mh[cubeCount];
+tbe::Time gTime;
+tbe::Cube ground;
+tbe::Mesh mh[cubeCount];
 
 float zNear = 0.001f;
 float zFar = 10000.0f;
 
-glm::vec3 pos = glm::vec3(0.0f, 0.0f, -3.0f);
-glm::vec3 rot;
+float deltaTime = 0.0f;
+float lastTime = 0.0f;
+
 glm::mat4x4 proj;
 float scale = 1.0f;
 
-void keyboard(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
-    case 'w':
-        pos.y += 0.1f;
-        break;
-    
-    case 's':
-        pos.y -= 0.1f;
-        break;
-
-    case 'a':
-        pos.x -= 0.1f;
-        break;
-
-    case 'd':
-        pos.x += 0.1f;
-        break;
-
-    case '+':
-        scale += 0.01f;
-        break;
-
-    case '-':
-        scale -= 0.01f;
-        break;
-    }
-}
 
 float color[512] = {
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
     1.0f, 1.0f, 1.0f
 };
 
@@ -133,6 +54,9 @@ void DeleteScene();
 
 void mainLoop()
 {
+    glutKeyboardFunc(tbeCam::keyboard);
+    glutMouseFunc(tbeCam::mouse);
+    glutPassiveMotionFunc(tbeCam::motion);
 
     while (true)
     {
@@ -170,8 +94,6 @@ int main(int argc, char** argv)
         return -2;
     }
 
-    glutKeyboardFunc(keyboard);
-
     glGetError();
 
     InitScene();
@@ -194,23 +116,21 @@ void InitScene()
 
     for(int i = 0; i < cubeCount; i++)
     {
-        //cb[i].init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, color, sizeof(color));
         mh[i].init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testLPBall2.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
-        ground.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, grassColor, sizeof(grassColor));
     }
-
+    
+    ground.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, grassColor, sizeof(grassColor));
 }
 
 void DisplayScene()
 {
-    glm::mat4x4 vi = glm::lookAt(glm::vec3(0.0f, 0.0f, -3.0f), rot, glm::vec3(0.0f, 1.0f, 0.0f));
+    tbeCam::setSpeed(0.05f * gTime.deltaTime());
+
+    glm::mat4x4 vi = glm::mat4x4(1.0);
+
+    vi = glm::lookAt(tbeCam::getPosition(), tbeCam::getRotation(), tbeCam::getUp());
 
     glm::mat4x4 mod = glm::mat4x4(1.0);
-
-    mod = glm::rotate(mod, pos.y, glm::vec3(0.0f, 1.0f, 0.0f));
-    mod = glm::rotate(mod, pos.x, glm::vec3(1.0f, 0.0f, 0.0f));
-
-    mod = glm::scale(mod, glm::vec3(scale, scale, scale));
 
     glClearColor(0.2f, 0.8f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -219,11 +139,6 @@ void DisplayScene()
 
     for(int i = 0; i < cubeCount; i++)
     {
-        //cb[i].SetPosition(static_cast<float>(i * 3) - (cubeCount * 3) / 2, 0.0f, 0.0f);
-        //cb[i].SetColor(color, sizeof(color));
-
-        //cb[i].draw(pvm);
-
         mh[i].SetPosition(static_cast<float>(i * 3) - (cubeCount * 3) / 2, 1.0f, 0.0f);
         mh[i].SetColor(color, sizeof(color));
         
@@ -234,6 +149,7 @@ void DisplayScene()
 
     ground.draw(pvm);
 
+    tbeCam::f_centerMouse();
 
     glutSwapBuffers();
 
@@ -253,7 +169,8 @@ void DeleteScene()
 {
     for(int i = 0; i < cubeCount; i++)
     {
-        //cb[i].deleteCube();
         mh[i].deleteMesh();
     }
+
+    ground.deleteCube();
 }

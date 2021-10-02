@@ -3,42 +3,42 @@
 #include <iostream>
 #include "buffers.h"
 
-Vao::Vao()
+tbe::TB_Vao::TB_Vao()
 {
     
 }
 
-void Vao::create()
+void tbe::TB_Vao::create()
 {
     glGenVertexArrays(1, &ID);
 }
 
-void Vao::bindVao()
+void tbe::TB_Vao::bindVao()
 {
     glBindVertexArray(ID);
 }
 
-void Vao::unbindVao()
+void tbe::TB_Vao::unbindVao()
 {
     glBindVertexArray(0);
 }
 
-void Vao::deleteVao()
+void tbe::TB_Vao::deleteVao()
 {
     glDeleteVertexArrays(1, &ID);
 }
 
-Vbo::Vbo()
+tbe::TB_Vbo::TB_Vbo()
 {
     
 }
 
-void Vbo::create()
+void tbe::TB_Vbo::create()
 {
     glGenBuffers(1, &ID);
 }
 
-void Vbo::bindVbo(const float table[], const unsigned long tableSize, const unsigned short dimensions, const unsigned int index, const int drawType)
+void tbe::TB_Vbo::bindVbo(const float table[], const unsigned long tableSize, const unsigned short dimensions, const unsigned int index, const int drawType)
 {
     glBindBuffer(GL_ARRAY_BUFFER, ID);
     glBufferData(GL_ARRAY_BUFFER, tableSize, table, drawType);
@@ -47,28 +47,28 @@ void Vbo::bindVbo(const float table[], const unsigned long tableSize, const unsi
     glEnableVertexAttribArray(index);
 }
 
-void Vbo::deleteVbo()
+void tbe::TB_Vbo::deleteVbo()
 {
     glDeleteBuffers(1, &ID);
 }
 
-Ebo::Ebo()
+tbe::TB_Ebo::TB_Ebo()
 {
 
 }
 
-void Ebo::create()
+void tbe::TB_Ebo::create()
 {
     glGenBuffers(1, &ID);
 }
 
-void Ebo::bindEbo(const unsigned int table[], const unsigned long tableSize, const int drawType)
+void tbe::TB_Ebo::bindEbo(const unsigned int table[], const unsigned long tableSize, const int drawType)
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, tableSize, table, drawType);
 }
 
-void Ebo::deleteEbo()
+void tbe::TB_Ebo::deleteEbo()
 {
     glDeleteBuffers(1, &ID);
 }

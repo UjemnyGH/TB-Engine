@@ -258,6 +258,144 @@ void tbe::TB_Mesh::SetScale(glm::vec3 scale)
     vao.unbindVao();
 }
 
+void tbe::TB_Mesh::SetPositionScale(float x, float y, float z, float scale)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < sizeof(vertices) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scale * scaleC[i * 3] + ((x * positionC[i * 3]) * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = scale * scaleC[(i * 3) + 1] + ((y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = scale * scaleC[(i * 3) + 2] + ((z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void tbe::TB_Mesh::SetPositionScale(float x, float y, float z, float sX, float sY, float sZ)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < sizeof(vertices) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = sX * scaleC[i * 3] + ((x * positionC[i * 3]) * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = sY * scaleC[(i * 3) + 1] + ((y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = sZ * scaleC[(i * 3) + 2] + ((z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void tbe::TB_Mesh::SetPositionScale(float x, float y, float z, glm::vec3 scale)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < sizeof(vertices) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scale.x * scaleC[i * 3] + ((x * positionC[i * 3]) * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = scale.y * scaleC[(i * 3) + 1] + ((y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = scale.z * scaleC[(i * 3) + 2] + ((z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void tbe::TB_Mesh::SetPositionScale(glm::vec3 pos, float scale)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < sizeof(vertices) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scale * scaleC[i * 3] + ((pos.x * positionC[i * 3]) * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = scale * scaleC[(i * 3) + 1] + ((pos.y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = scale * scaleC[(i * 3) + 2] + ((pos.z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void tbe::TB_Mesh::SetPositionScale(glm::vec3 pos, float sX, float sY, float sZ)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < sizeof(vertices) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = sX * scaleC[i * 3] + ((pos.x * positionC[i * 3]) * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = sY * scaleC[(i * 3) + 1] + ((pos.y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = sZ * scaleC[(i * 3) + 2] + ((pos.z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
+void tbe::TB_Mesh::SetPositionScale(glm::vec3 pos, glm::vec3 scale)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < sizeof(vertices) / 12; i++)
+    {
+        positionC[i * 3] = psrConst[i * 3];
+        positionC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        positionC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        scaleC[i * 3] = psrConst[i * 3];
+        scaleC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        scaleC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = scale.x * scaleC[i * 3] + ((pos.x * positionC[i * 3]) * psrConst[i * 3]);
+        vertices[(i * 3) + 1] = scale.y * scaleC[(i * 3) + 1] + ((pos.y * positionC[(i * 3) + 1]) * psrConst[(i * 3) + 1]);
+        vertices[(i * 3) + 2] = scale.z * scaleC[(i * 3) + 2] + ((pos.z * positionC[(i * 3) + 2]) * psrConst[(i * 3) + 2]);
+    }
+
+    vbo[0].bindVbo(vertices.data(), sizeof(float) * vertices.size(), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
 void tbe::TB_Mesh::SetColor(float color[], size_t colorSize)
 {
     vao.bindVao();

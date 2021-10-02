@@ -42,6 +42,18 @@ namespace tbe
         void SetScale(float x, float y, float z);
         //set scale of mesh
         void SetScale(glm::vec3 scale);
+        //set scale and position of mesh
+        void SetPositionScale(float x, float y, float z, float scale);
+        //set scale and position of mesh
+        void SetPositionScale(float x, float y, float z, float sX, float sY, float sZ);
+        //set scale and position of mesh
+        void SetPositionScale(float x, float y, float z, glm::vec3 scale);
+        //set scale and position of mesh
+        void SetPositionScale(glm::vec3 pos, float scale);
+        //set scale and position of mesh
+        void SetPositionScale(glm::vec3 pos, float sX, float sY, float sZ);
+        //set scale and position of mesh
+        void SetPositionScale(glm::vec3 pos, glm::vec3 scale);
         //set color of mesh
         void SetColor(float color[], size_t colorSize);
         //delete mesh

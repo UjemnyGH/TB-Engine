@@ -14,12 +14,13 @@
 #include "cube.h"
 #include "mesh.h"
 #include "player/camera.h"
-#include "time.h"
+#include "TB_time.h"
 
 const int cubeCount = 3;
 
 tbe::Time gTime;
 tbe::Cube ground;
+tbe::Cube player;
 tbe::Mesh mh[cubeCount];
 
 float zNear = 0.001f;
@@ -120,6 +121,8 @@ void InitScene()
     }
     
     ground.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, grassColor, sizeof(grassColor));
+
+    player.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, grassColor, sizeof(grassColor));
 }
 
 void DisplayScene()
@@ -147,9 +150,15 @@ void DisplayScene()
 
     ground.SetScale(10.0f, 0.1f, 10.0f);
 
-    ground.draw(pvm);
+    ground.draw(pvm, GL_TRIANGLES);
+
+    player.SetPositionScale(tbeCam::getPosition() - glm::vec3(0.0f, 1.0f, 0.0f), 0.5f, 2.0f, 0.5f);
+
+    player.draw(pvm, GL_LINES);
 
     tbeCam::f_centerMouse();
+
+    tbeCam::setSensitivity(0.1f);
 
     glutSwapBuffers();
 
@@ -173,4 +182,5 @@ void DeleteScene()
     }
 
     ground.deleteCube();
+    player.deleteCube();
 }

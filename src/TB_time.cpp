@@ -1,6 +1,6 @@
 #include <GL/freeglut.h>
 #include <iostream>
-#include "time.h"
+#include "TB_time.h"
 
 float tbe::TB_Time::deltaTime()
 {

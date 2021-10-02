@@ -15,6 +15,8 @@ namespace tbe
         Ebo ebo;
         Shader sh;
 
+        bool collisionsOn;
+
         float vertices[24] = {
             1.0f, 1.0f, 1.0f,
             1.0f, -1.0f, 1.0f,
@@ -78,7 +80,7 @@ namespace tbe
         //initialize cube
         void init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof);
         //draw cube
-        void draw(glm::mat4x4 pvm);
+        void draw(glm::mat4x4 pvm, int drawType);
         //set position of cube
         void SetPosition(float x, float y, float z);
         //set position of cube
@@ -89,8 +91,22 @@ namespace tbe
         void SetScale(float x, float y, float z);
         //set scale of cube
         void SetScale(glm::vec3 scale);
+        //set scale and position of cube
+        void SetPositionScale(float x, float y, float z, float scale);
+        //set scale and position of cube
+        void SetPositionScale(float x, float y, float z, float sX, float sY, float sZ);
+        //set scale and position of cube
+        void SetPositionScale(float x, float y, float z, glm::vec3 scale);
+        //set scale and position of cube
+        void SetPositionScale(glm::vec3 pos, float scale);
+        //set scale and position of cube
+        void SetPositionScale(glm::vec3 pos, float sX, float sY, float sZ);
+        //set scale and position of cube
+        void SetPositionScale(glm::vec3 pos, glm::vec3 scale);
         //set color of cube
         void SetColor(float color[], size_t colorSizeof);
+        //on/off collisions
+        void SetCollisionTrue(bool collisionTrue);
         //delete cube
         void deleteCube();
     };

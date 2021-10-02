@@ -6,7 +6,6 @@ Warns:
 
 TODO:
 -Textures
--Camera class
 -Raycasting
 -More templates shaders
 -Lights

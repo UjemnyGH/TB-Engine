@@ -5,6 +5,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include "camera.h"
+#include "../TB_time.h"
 
 int bX, bY;
 bool centerMouse = true;
@@ -38,11 +39,11 @@ void tbeCam::keyboard(unsigned char key, int x, int y)
         break;
 
     case ' ':
-        camPos.y += 0.1f;
+        camPos.y += 0.1f * speed;
         break;
 
     case 'c':
-        camPos.y -= 0.1f;
+        camPos.y -= 0.1f * speed;
         break;
 
     case 'b':
@@ -98,6 +99,8 @@ void tbeCam::motion(int x, int y)
         {
             bY = bY + 1.0f;
         }
+
+        setSensitivity(0.1f);
     }
     else
     {
@@ -108,6 +111,8 @@ void tbeCam::motion(int x, int y)
 
         bX = x;
         bY = y;
+
+        setSensitivity(0.0f);
     }
 
     xOff *= sensitivity;

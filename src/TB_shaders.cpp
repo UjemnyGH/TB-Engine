@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <fstream>
-#include "shaders.h"
+#include "TB_shaders.h"
 
 unsigned int tbe::LoadShader(const int & type, const std::string & name)
 {

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <glm/gtc/type_ptr.hpp>
-#include "mesh.h"
+#include "TB_mesh.h"
 
 void tbe::TB_Mesh::init(const std::string & fragName, const std::string & vertName, const std::string & meshName, const int drawType, const float color[], const unsigned long colorSizeof)
 {
@@ -154,14 +154,14 @@ void tbe::TB_Mesh::init(const std::string & fragName, const std::string & vertNa
     vao.unbindVao();
 }
 
-void tbe::TB_Mesh::draw(glm::mat4x4 pvm)
+void tbe::TB_Mesh::draw(glm::mat4x4 pvm, int drawType)
 {
     vao.bindVao();
     glUseProgram(sh.ID);
 
     glUniformMatrix4fv(glGetUniformLocation(sh.ID, "pvm"), 1, GL_FALSE, glm::value_ptr(pvm));
 
-    glDrawElements(GL_TRIANGLES, vertices.size() * 2, GL_UNSIGNED_INT, NULL);
+    glDrawElements(drawType, vertices.size() * 2, GL_UNSIGNED_INT, NULL);
 
     vao.unbindVao();
     glUseProgram(0);

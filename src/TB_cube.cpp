@@ -3,9 +3,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
-#include "cube.h"
-#include "shaders.h"
-#include "buffers.h"
+#include "TB_cube.h"
+#include "TB_shaders.h"
+#include "TB_buffers.h"
 
 void tbe::TB_Cube::init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof)
 {
@@ -26,8 +26,27 @@ void tbe::TB_Cube::init(const std::string & fragName, const std::string & vertNa
     vao.unbindVao();
 }
 
+glm::vec3 tbe::TB_Cube::GetPosition()
+{
+    return glm::vec3(cpX, cpY, cpZ);
+}
+
+glm::vec3 tbe::TB_Cube::GetScale()
+{
+    return glm::vec3(csX, csY, csZ);
+}
+
+glm::vec3 tbe::TB_Cube::GetRotation()
+{
+    return glm::vec3(crX, crY, crZ);
+}
+
 void tbe::TB_Cube::SetPosition(float x, float y, float z)
 {
+    cpX = x;
+    cpY = y;
+    cpZ = z;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -47,6 +66,10 @@ void tbe::TB_Cube::SetPosition(float x, float y, float z)
 
 void tbe::TB_Cube::SetPosition(glm::vec3 position)
 {
+    cpX = position.x;
+    cpY = position.y;
+    cpZ = position.z;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -66,6 +89,10 @@ void tbe::TB_Cube::SetPosition(glm::vec3 position)
 
 void tbe::TB_Cube::SetScale(float scale)
 {
+    csX = scale;
+    csY = scale;
+    csZ = scale;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 4; i++)
@@ -81,6 +108,10 @@ void tbe::TB_Cube::SetScale(float scale)
 
 void tbe::TB_Cube::SetScale(float x, float y, float z)
 {
+    csX = x;
+    csY = y;
+    csZ = z;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -100,6 +131,10 @@ void tbe::TB_Cube::SetScale(float x, float y, float z)
 
 void tbe::TB_Cube::SetScale(glm::vec3 scale)
 {
+    csX = scale.x;
+    csY = scale.y;
+    csZ = scale.z;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -117,8 +152,34 @@ void tbe::TB_Cube::SetScale(glm::vec3 scale)
     vao.unbindVao();
 }
 
+void tbe::Cube::SetRotation(float x, float y, float z)
+{
+    vao.bindVao();
+
+    for(int i = 0; i < sizeof(vertices) / 12; i++)
+    {
+        rotationC[i * 3] = psrConst[i * 3];
+        rotationC[(i * 3) + 1] = psrConst[(i * 3) + 1];
+        rotationC[(i * 3) + 2] = psrConst[(i * 3) + 2];
+
+        vertices[i * 3] = cos(x) - sin(y);
+        vertices[(i * 3) + 1] = sin(x) + cos(y);
+    }
+
+    vbo[0].bindVbo(vertices, sizeof(vertices), 3, 0, GL_DYNAMIC_DRAW);
+    vao.unbindVao();
+}
+
 void tbe::TB_Cube::SetPositionScale(float x, float y, float z, float scale)
 {
+    cpX = x;
+    cpY = y;
+    cpZ = z;
+
+    csX = scale;
+    csY = scale;
+    csZ = scale;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -142,6 +203,14 @@ void tbe::TB_Cube::SetPositionScale(float x, float y, float z, float scale)
 
 void tbe::TB_Cube::SetPositionScale(float x, float y, float z, float sX, float sY, float sZ)
 {
+    cpX = x;
+    cpY = y;
+    cpZ = z;
+
+    csX = sX;
+    csY = sY;
+    csZ = sZ;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -165,6 +234,14 @@ void tbe::TB_Cube::SetPositionScale(float x, float y, float z, float sX, float s
 
 void tbe::TB_Cube::SetPositionScale(float x, float y, float z, glm::vec3 scale)
 {
+    cpX = x;
+    cpY = y;
+    cpZ = z;
+
+    csX = scale.x;
+    csY = scale.y;
+    csZ = scale.z;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -188,6 +265,14 @@ void tbe::TB_Cube::SetPositionScale(float x, float y, float z, glm::vec3 scale)
 
 void tbe::TB_Cube::SetPositionScale(glm::vec3 pos, float scale)
 {
+    cpX = pos.x;
+    cpY = pos.y;
+    cpZ = pos.z;
+
+    csX = scale;
+    csY = scale;
+    csZ = scale;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -211,6 +296,14 @@ void tbe::TB_Cube::SetPositionScale(glm::vec3 pos, float scale)
 
 void tbe::TB_Cube::SetPositionScale(glm::vec3 pos, float sX, float sY, float sZ)
 {
+    cpX = pos.x;
+    cpY = pos.y;
+    cpZ = pos.z;
+
+    csX = sX;
+    csY = sY;
+    csZ = sZ;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -234,6 +327,14 @@ void tbe::TB_Cube::SetPositionScale(glm::vec3 pos, float sX, float sY, float sZ)
 
 void tbe::TB_Cube::SetPositionScale(glm::vec3 pos, glm::vec3 scale)
 {
+    cpX = pos.x;
+    cpY = pos.y;
+    cpZ = pos.z;
+
+    csX = scale.x;
+    csY = scale.y;
+    csZ = scale.z;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)

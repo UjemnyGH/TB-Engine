@@ -2,8 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
-#include "buffers.h"
-#include "shaders.h"
+#include "TB_buffers.h"
+#include "TB_shaders.h"
 
 namespace tbe
 {
@@ -31,7 +31,7 @@ namespace tbe
         //init mesh
         void init(const std::string & fragName, const std::string & vertName, const std::string & meshName, const int drawType, const float color[], const unsigned long colorSizeof);
         //draw mesh
-        void draw(glm::mat4x4 pvm);
+        void draw(glm::mat4x4 pvm, int drawType);
         //set position of mesh
         void SetPosition(float x, float y, float z);
         //set position of mesh

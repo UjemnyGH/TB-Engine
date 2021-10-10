@@ -1,7 +1,7 @@
 #define GLEWW_STATIC
 #include <GL/glew.h>
 #include <iostream>
-#include "buffers.h"
+#include "TB_buffers.h"
 
 tbe::TB_Vao::TB_Vao()
 {

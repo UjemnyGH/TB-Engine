@@ -1,8 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <iostream>
-#include "shaders.h"
-#include "buffers.h"
+#include "TB_shaders.h"
+#include "TB_buffers.h"
 
 namespace tbe
 {
@@ -16,6 +16,8 @@ namespace tbe
         Shader sh;
 
         bool collisionsOn;
+
+        float cpX, cpY, cpZ, csX, csY, csZ, crX, crY, crZ;
 
         float vertices[24] = {
             1.0f, 1.0f, 1.0f,
@@ -40,6 +42,17 @@ namespace tbe
         };
 
         float positionC[24] = {
+            1.0f, 1.0f, 1.0f,
+            1.0f, -1.0f, 1.0f,
+            -1.0f, 1.0f, 1.0f,
+            -1.0f, -1.0f, 1.0f,
+            1.0f, 1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            -1.0f, 1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f
+        };
+
+        float rotationC[24] = {
             1.0f, 1.0f, 1.0f,
             1.0f, -1.0f, 1.0f,
             -1.0f, 1.0f, 1.0f,
@@ -81,6 +94,12 @@ namespace tbe
         void init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof);
         //draw cube
         void draw(glm::mat4x4 pvm, int drawType);
+        //get position of cube
+        glm::vec3 GetPosition();
+        //get scale of cube
+        glm::vec3 GetScale();
+        //get rotation of cube
+        glm::vec3 GetRotation();
         //set position of cube
         void SetPosition(float x, float y, float z);
         //set position of cube
@@ -91,6 +110,8 @@ namespace tbe
         void SetScale(float x, float y, float z);
         //set scale of cube
         void SetScale(glm::vec3 scale);
+        //set rotation of cube
+        void SetRotation(float x, float y, float z);
         //set scale and position of cube
         void SetPositionScale(float x, float y, float z, float scale);
         //set scale and position of cube

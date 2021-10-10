@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <glm/glm.hpp>
-#include "camera.h"
+#include "TB_camera.h"
 #include "../TB_time.h"
 
 int bX, bY;

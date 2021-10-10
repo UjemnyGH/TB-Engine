@@ -9,43 +9,63 @@
 #include <random>
 #include <future>
 #include <math.h>
-#include "shaders.h"
-#include "buffers.h"
-#include "cube.h"
-#include "mesh.h"
-#include "player/camera.h"
+#include "TB_shaders.h"
+#include "TB_buffers.h"
+#include "TB_cube.h"
+#include "TB_mesh.h"
+#include "player/TB_camera.h"
 #include "TB_time.h"
-
-const int cubeCount = 3;
+#include "TB_window.h"
 
 tbe::Time gTime;
-tbe::Cube ground;
-tbe::Cube player;
-tbe::Mesh mh[cubeCount];
+tbe::Window gameWindow;
 
 float zNear = 0.001f;
 float zFar = 10000.0f;
 
-float deltaTime = 0.0f;
-float lastTime = 0.0f;
-
 glm::mat4x4 proj;
-float scale = 1.0f;
 
+double planetsPos;
+double planets2Pos;
+tbe::Cube planet;
+tbe::Cube planet2;
+tbe::Cube sun;
 
 float color[512] = {
     1.0f, 1.0f, 1.0f
 };
 
-float grassColor[24] = {
-    0.0f, 0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f
+float planet1col[] = {
+    0.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 0.0f
+};
+
+float planet2col[] = {
+    0.0f, 0.0f, 1.0f,
+    1.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 1.0f,
+    1.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 0.0f,
+    1.0f, 0.0f, 1.0f,
+    1.0f, 1.0f, 0.0f
+};
+
+float suncol[] = {
+    1.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 0.0f
 };
 
 void InitScene();
@@ -72,30 +92,7 @@ void mainLoop()
 
 int main(int argc, char** argv)
 {
-    glutInit(&argc, argv);
-
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-
-    glutInitContextVersion(4, 3);
-    glutInitContextProfile(GLUT_CORE_PROFILE);
-
-    glutInitWindowSize(800, 600);
-
-    glutCreateWindow("Window");
-
-    glewExperimental = GL_TRUE;
-
-    if(glewInit() != GLEW_OK)
-    {
-        return -1;
-    }
-
-    if(!GLEW_VERSION_4_3)
-    {
-        return -2;
-    }
-
-    glGetError();
+    gameWindow = tbe::Window(argc, argv, "Game");
 
     InitScene();
 
@@ -113,16 +110,9 @@ int main(int argc, char** argv)
 
 void InitScene()
 {
-    glEnable(GL_DEPTH_TEST);
-
-    for(int i = 0; i < cubeCount; i++)
-    {
-        mh[i].init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", "data/models/testLPBall2.obj", GL_DYNAMIC_DRAW, color, sizeof(color));
-    }
-    
-    ground.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, grassColor, sizeof(grassColor));
-
-    player.init("data/shaders/bfs.glsl", "data/shaders/bvs.glsl", GL_DYNAMIC_DRAW, grassColor, sizeof(grassColor));
+    planet.init(tbe::colorFS, tbe::colorVS, GL_DYNAMIC_DRAW, planet1col, sizeof(planet1col));
+    planet2.init(tbe::colorFS, tbe::colorVS, GL_DYNAMIC_DRAW, planet2col, sizeof(planet2col));
+    sun.init(tbe::colorFS, tbe::colorVS, GL_DYNAMIC_DRAW, suncol, sizeof(suncol));
 }
 
 void DisplayScene()
@@ -140,27 +130,23 @@ void DisplayScene()
 
     glm::mat4x4 pvm = proj * vi * mod;
 
-    for(int i = 0; i < cubeCount; i++)
-    {
-        mh[i].SetPosition(static_cast<float>(i * 3) - (cubeCount * 3) / 2, 1.0f, 0.0f);
-        mh[i].SetColor(color, sizeof(color));
-        
-        mh[i].draw(pvm);
-    }
+    planetsPos += 0.01;
+    planets2Pos += 0.05;
 
-    ground.SetScale(10.0f, 0.1f, 10.0f);
+    planet.SetPositionScale(glm::vec3((cos(planetsPos) - sin(planetsPos)) * 2.0f, 0.0f, (cos(planetsPos) + sin(planetsPos)) * 2.0f), 1.0f);
+    planet.draw(pvm, GL_TRIANGLES);
 
-    ground.draw(pvm, GL_TRIANGLES);
+    planet2.SetPositionScale(glm::vec3((cos(planets2Pos) - sin(planets2Pos)) + planet.GetPosition().x * 2.0f, 0.0f, (cos(planets2Pos) + sin(planets2Pos)) + planet.GetPosition().z * 2.0f), 1.0f);
+    planet2.draw(pvm, GL_TRIANGLES);
 
-    player.SetPositionScale(tbeCam::getPosition() - glm::vec3(0.0f, 1.0f, 0.0f), 0.5f, 2.0f, 0.5f);
-
-    player.draw(pvm, GL_LINES);
+    sun.draw(pvm, GL_TRIANGLES);
 
     tbeCam::f_centerMouse();
-
     tbeCam::setSensitivity(0.1f);
 
     glutSwapBuffers();
+
+    gameWindow.basicErrorChecking();
 
     glutPostRedisplay();
 }
@@ -176,11 +162,5 @@ void ReshapeScene(int w, int h)
 
 void DeleteScene()
 {
-    for(int i = 0; i < cubeCount; i++)
-    {
-        mh[i].deleteMesh();
-    }
 
-    ground.deleteCube();
-    player.deleteCube();
 }

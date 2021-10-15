@@ -4,7 +4,7 @@
 
 float tbe::TB_Time::deltaTime()
 {
-    currentFrame = glutGet(GLUT_ELAPSED_TIME);
+    currentFrame = (float)glutGet(GLUT_ELAPSED_TIME);
     deltaFrame = currentFrame - lastFrame;
     lastFrame = currentFrame;
 

@@ -167,8 +167,27 @@ void tbe::TB_Mesh::draw(glm::mat4x4 pvm, int drawType)
     glUseProgram(0);
 }
 
+glm::vec3 tbe::TB_Mesh::GetPosition()
+{
+    return glm::vec3(cpX, cpY, cpZ);
+}
+
+glm::vec3 tbe::TB_Mesh::GetScale()
+{
+    return glm::vec3(csX, csY, csZ);
+}
+
+glm::vec3 tbe::TB_Mesh::GetRotation()
+{
+    return glm::vec3(crX, crY, crZ);
+}
+
 void tbe::TB_Mesh::SetPosition(float x, float y, float z)
 {
+    cpX = x;
+    cpY = y;
+    cpZ = z;
+
     vao.bindVao();
 
     for(int i = 0; i < (sizeof(float) * vertices.size()) / 12; i++)
@@ -188,6 +207,10 @@ void tbe::TB_Mesh::SetPosition(float x, float y, float z)
 
 void tbe::TB_Mesh::SetPosition(glm::vec3 pos)
 {
+    cpX = pos.x;
+    cpY = pos.y;
+    cpZ = pos.z;
+
     vao.bindVao();
 
     for(int i = 0; i < (sizeof(float) * vertices.size()) / 12; i++)
@@ -207,6 +230,10 @@ void tbe::TB_Mesh::SetPosition(glm::vec3 pos)
 
 void tbe::TB_Mesh::SetScale(float scale)
 {
+    csX = scale;
+    csY = scale;
+    csZ = scale;
+
     vao.bindVao();
 
     for(int i = 0; i < (sizeof(float) * vertices.size()) / 4; i++)
@@ -222,6 +249,10 @@ void tbe::TB_Mesh::SetScale(float scale)
 
 void tbe::TB_Mesh::SetScale(float x, float y, float z)
 {
+    csX = x;
+    csY = y;
+    csZ = z;
+
     vao.bindVao();
 
     for(int i = 0; i < (sizeof(float) * vertices.size()) / 12; i++)
@@ -241,6 +272,10 @@ void tbe::TB_Mesh::SetScale(float x, float y, float z)
 
 void tbe::TB_Mesh::SetScale(glm::vec3 scale)
 {
+    csX = scale.x;
+    csY = scale.y;
+    csZ = scale.z;
+
     vao.bindVao();
 
     for(int i = 0; i < (sizeof(float) * vertices.size()) / 12; i++)
@@ -260,6 +295,14 @@ void tbe::TB_Mesh::SetScale(glm::vec3 scale)
 
 void tbe::TB_Mesh::SetPositionScale(float x, float y, float z, float scale)
 {
+    cpX = x;
+    cpY = y;
+    cpZ = z;
+
+    csX = scale;
+    csY = scale;
+    csZ = scale;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -283,6 +326,14 @@ void tbe::TB_Mesh::SetPositionScale(float x, float y, float z, float scale)
 
 void tbe::TB_Mesh::SetPositionScale(float x, float y, float z, float sX, float sY, float sZ)
 {
+    cpX = x;
+    cpY = y;
+    cpZ = z;
+
+    csX = sX;
+    csY = sY;
+    csZ = sZ;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -306,6 +357,14 @@ void tbe::TB_Mesh::SetPositionScale(float x, float y, float z, float sX, float s
 
 void tbe::TB_Mesh::SetPositionScale(float x, float y, float z, glm::vec3 scale)
 {
+    cpX = x;
+    cpY = y;
+    cpZ = z;
+
+    csX = scale.x;
+    csY = scale.y;
+    csZ = scale.z;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -329,6 +388,14 @@ void tbe::TB_Mesh::SetPositionScale(float x, float y, float z, glm::vec3 scale)
 
 void tbe::TB_Mesh::SetPositionScale(glm::vec3 pos, float scale)
 {
+    cpX = pos.x;
+    cpY = pos.y;
+    cpZ = pos.z;
+
+    csX = scale;
+    csY = scale;
+    csZ = scale;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -352,6 +419,14 @@ void tbe::TB_Mesh::SetPositionScale(glm::vec3 pos, float scale)
 
 void tbe::TB_Mesh::SetPositionScale(glm::vec3 pos, float sX, float sY, float sZ)
 {
+    cpX = pos.x;
+    cpY = pos.y;
+    cpZ = pos.z;
+
+    csX = sX;
+    csY = sY;
+    csZ = sZ;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)
@@ -375,6 +450,14 @@ void tbe::TB_Mesh::SetPositionScale(glm::vec3 pos, float sX, float sY, float sZ)
 
 void tbe::TB_Mesh::SetPositionScale(glm::vec3 pos, glm::vec3 scale)
 {
+    cpX = pos.x;
+    cpY = pos.y;
+    cpZ = pos.z;
+
+    csX = scale.x;
+    csY = scale.y;
+    csZ = scale.z;
+
     vao.bindVao();
 
     for(int i = 0; i < sizeof(vertices) / 12; i++)

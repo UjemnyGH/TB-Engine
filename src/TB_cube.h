@@ -93,7 +93,7 @@ namespace tbe
         //initialize cube
         void init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof);
         //draw cube
-        void draw(glm::mat4x4 pvm, int drawType);
+        void draw(glm::mat4x4 pvm, int drawMode);
         //get position of cube
         glm::vec3 GetPosition();
         //get scale of cube

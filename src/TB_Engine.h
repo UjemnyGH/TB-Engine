@@ -1,0 +1,20 @@
+#pragma once
+
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <iostream>
+#include <random>
+#include <future>
+#include <math.h>
+#include "TB_shaders.h"
+#include "TB_buffers.h"
+#include "TB_cube.h"
+#include "TB_mesh.h"
+#include "player/TB_camera.h"
+#include "TB_time.h"
+#include "TB_window.h"

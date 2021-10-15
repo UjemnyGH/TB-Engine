@@ -6,6 +6,7 @@
 #include "TB_cube.h"
 #include "TB_shaders.h"
 #include "TB_buffers.h"
+#include "TB_engine_variables.h"
 
 void tbe::TB_Cube::init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof)
 {
@@ -152,6 +153,7 @@ void tbe::TB_Cube::SetScale(glm::vec3 scale)
     vao.unbindVao();
 }
 
+//TODO: Rotations
 void tbe::Cube::SetRotation(float x, float y, float z)
 {
     vao.bindVao();
@@ -162,8 +164,8 @@ void tbe::Cube::SetRotation(float x, float y, float z)
         rotationC[(i * 3) + 1] = psrConst[(i * 3) + 1];
         rotationC[(i * 3) + 2] = psrConst[(i * 3) + 2];
 
-        vertices[i * 3] = cos(x) - sin(y);
-        vertices[(i * 3) + 1] = sin(x) + cos(y);
+        vertices[i * 3] = (cos(glm::radians(x)) * cos(glm::radians(y))) * rotationC[i + 3];
+        vertices[(i * 3) + 1] = (sin(glm::radians(y))) * rotationC[(i + 3) + 1];
     }
 
     vbo[0].bindVbo(vertices, sizeof(vertices), 3, 0, GL_DYNAMIC_DRAW);
@@ -363,14 +365,14 @@ void tbe::TB_Cube::SetColor(float color[], size_t colorSizeof)
     vao.unbindVao();
 }
 
-void tbe::TB_Cube::draw(glm::mat4x4 pvm, int drawType)
+void tbe::TB_Cube::draw(glm::mat4x4 pvm, int drawMode)
 {
     vao.bindVao();
     glUseProgram(sh.ID);
 
     glUniformMatrix4fv(glGetUniformLocation(sh.ID, "pvm"), 1, GL_FALSE, glm::value_ptr(pvm));
 
-    glDrawElements(drawType, sizeof(vertices) / 2, GL_UNSIGNED_INT, NULL);
+    glDrawElements(drawMode, sizeof(vertices) / 2, GL_UNSIGNED_INT, NULL);
 
     vao.unbindVao();
     glUseProgram(0);

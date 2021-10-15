@@ -15,6 +15,8 @@ namespace tbe
         Ebo ebo;
         Shader sh;
 
+        float cpX, cpY, cpZ, csX, csY, csZ, crX, crY, crZ;
+
         std::vector<float> vertices;
         std::vector<float> textureVertices;
         std::vector<float> uvNormals;
@@ -32,6 +34,12 @@ namespace tbe
         void init(const std::string & fragName, const std::string & vertName, const std::string & meshName, const int drawType, const float color[], const unsigned long colorSizeof);
         //draw mesh
         void draw(glm::mat4x4 pvm, int drawType);
+        //get position of cube
+        glm::vec3 GetPosition();
+        //get scale of cube
+        glm::vec3 GetScale();
+        //get rotation of cube
+        glm::vec3 GetRotation();
         //set position of mesh
         void SetPosition(float x, float y, float z);
         //set position of mesh

@@ -120,5 +120,5 @@ namespace tbe
             z = vZ;
             w = vW;
         }
-    };   
+    };
 }

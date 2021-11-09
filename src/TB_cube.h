@@ -11,11 +11,12 @@ namespace tbe
     private:
         //unsigned int vao, vbo[2], ebo;
         Vao vao;
-        Vbo vbo[2];
+        Vbo vbo[3];
         Ebo ebo;
         Shader sh;
+        Texture texture;
 
-        bool collisionsOn;
+        bool collisionsOn, texturesEnabled;
 
         float cpX, cpY, cpZ, csX, csY, csZ, crX, crY, crZ;
 
@@ -89,9 +90,18 @@ namespace tbe
             3, 6, 7
         };
 
+        const float texturePoints[8] = {
+            1.0f, 1.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 0.0f
+        };
+
     public:
         //initialize cube
         void init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof);
+        //initialize cube with textures
+        void init(const std::string & fragName, const std::string & vertName, const std::string textureName, const int drawType, const float color[], size_t colorSizeof);
         //draw cube
         void draw(glm::mat4x4 pvm, int drawMode);
         //get position of cube
@@ -128,6 +138,8 @@ namespace tbe
         void SetColor(float color[], size_t colorSizeof);
         //on/off collisions
         void SetCollisionTrue(bool collisionTrue);
+        //set cube texture
+        void SetTexture(const std::string path, const int wrapping);
         //delete cube
         void deleteCube();
     };

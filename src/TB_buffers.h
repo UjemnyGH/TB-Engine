@@ -6,6 +6,7 @@ namespace tbe
     {
     private:
         unsigned int ID;
+
     public:
         TB_Vao();
         //creating vertex array object
@@ -22,6 +23,7 @@ namespace tbe
     {
     private:
         unsigned int ID;
+
     public:
         TB_Vbo();
         //create vertex buffer object
@@ -36,6 +38,7 @@ namespace tbe
     {
     private:
         unsigned int ID;
+
     public:
         TB_Ebo();
         //create element buffer object
@@ -46,7 +49,29 @@ namespace tbe
         void deleteEbo();
     };
 
+    class TB_Texture
+    {
+    private:
+        unsigned int ID;
+        int width, height, normalChannels;
+        unsigned char* data;
+
+    public:
+        TB_Texture();
+        //create texture
+        void create();
+        //bind texture
+        void bindTexture(const std::string path, const int wrapping);
+        //bind texture
+        void bindTexture();
+        //unbind texture
+        void unbindTexture();
+        //delete texture
+        void deleteTexture();
+    };
+
     typedef TB_Vao Vao;
     typedef TB_Vbo Vbo;
     typedef TB_Ebo Ebo;
+    typedef TB_Texture Texture;
 }

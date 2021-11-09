@@ -121,4 +121,23 @@ namespace tbe
             w = vW;
         }
     };
+
+    struct color
+    {
+        float r;
+        float g;
+        float b;
+
+        color()
+        {
+
+        }
+
+        color(float &R, float &G, float &B)
+        {
+            r = R;
+            g = G;
+            b = B;
+        }
+    };
 }

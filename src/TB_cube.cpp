@@ -10,6 +10,8 @@
 
 void tbe::TB_Cube::init(const std::string & fragName, const std::string & vertName, const int drawType, const float color[], size_t colorSizeof)
 {
+    texturesEnabled = false;
+    
     sh = Shader(vertName, fragName);
 
     vao.create();
@@ -21,8 +23,43 @@ void tbe::TB_Cube::init(const std::string & fragName, const std::string & vertNa
     vbo[1].create();
     vbo[1].bindVbo(color, colorSizeof, 3, 1, drawType);
 
+    vbo[2].create();
+
     ebo.create();
     ebo.bindEbo(indices, sizeof(indices), drawType);
+
+    vao.unbindVao();
+}
+
+void tbe::TB_Cube::init(const std::string & fragName, const std::string & vertName, const std::string textureName, const int drawType, const float color[], size_t colorSizeof)
+{
+    texturesEnabled = true;
+
+    sh = Shader(vertName, fragName);
+
+    vao.create();
+    vao.bindVao();
+
+    vbo[0].create();
+    vbo[0].bindVbo(vertices, sizeof(vertices), 3, 0, drawType);
+
+    vbo[1].create();
+    vbo[1].bindVbo(color, colorSizeof, 3, 1, drawType);
+
+    vbo[2].create();
+    vbo[2].bindVbo(texturePoints, sizeof(texturePoints), 2, 2, drawType);
+
+    texture.create();
+    texture.bindTexture(textureName, GL_REPEAT);
+
+    ebo.create();
+    ebo.bindEbo(indices, sizeof(indices), drawType);
+
+    glUseProgram(sh.ID);
+
+    glUniform1i(glGetUniformLocation(sh.ID, "tex"), 0);
+
+    glUseProgram(0);
 
     vao.unbindVao();
 }
@@ -154,6 +191,40 @@ void tbe::TB_Cube::SetScale(glm::vec3 scale)
 }
 
 //TODO: Rotations
+//FIXME: Rotations
+//NOTDONE: Rotations
+//Fix it
+//Try to fix that shit
+//F-I-X--T-H-I-S
+//That down there !!!FIXIT!!!
+//Do it
+//FIX IT THAT NOT THAT HARD
+//TRYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY TO FIX THAT PIECE OF SHIT
+/**
+ * @brief YOU MUST SEE THIS
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * SEE SO REPAIR
+ */
+/**
+ * @brief WHAT THE FUCK I DONT REPAIR THIS !!!!!!!!!!!!!!!!!!!REPAIR!!!!!!!!!!!!!!!!!!!!!!!!
+ * 
+ */
+/**
+ * @brief SCREW THAT PIECE OF SHIT - DELETE IT BECOUS YOU NEVER FIX IT
+ */
 void tbe::Cube::SetRotation(float x, float y, float z)
 {
     vao.bindVao();
@@ -369,6 +440,10 @@ void tbe::TB_Cube::draw(glm::mat4x4 pvm, int drawMode)
 {
     vao.bindVao();
     glUseProgram(sh.ID);
+    if(texturesEnabled)
+    {
+        texture.bindTexture();
+    }
 
     glUniformMatrix4fv(glGetUniformLocation(sh.ID, "pvm"), 1, GL_FALSE, glm::value_ptr(pvm));
 
@@ -383,10 +458,22 @@ void tbe::TB_Cube::SetCollisionTrue(bool collisionTrue)
     collisionsOn = collisionTrue;
 }
 
+void tbe::TB_Cube::SetTexture(const std::string path, const int wrapping)
+{
+    glUseProgram(sh.ID);
+    vao.bindVao();
+
+    texture.bindTexture(path, wrapping);
+
+    glUseProgram(0);
+    vao.unbindVao();
+}
+
 void tbe::TB_Cube::deleteCube()
 {
     vao.deleteVao();
     vbo->deleteVbo();
     ebo.deleteEbo();
     glDeleteProgram(sh.ID);
+    texture.deleteTexture();
 }

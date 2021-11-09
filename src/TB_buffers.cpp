@@ -2,6 +2,8 @@
 #include <GL/glew.h>
 #include <iostream>
 #include "TB_buffers.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image/stb_image.h"
 
 tbe::TB_Vao::TB_Vao()
 {
@@ -71,4 +73,54 @@ void tbe::TB_Ebo::bindEbo(const unsigned int table[], const unsigned long tableS
 void tbe::TB_Ebo::deleteEbo()
 {
     glDeleteBuffers(1, &ID);
+}
+
+tbe::TB_Texture::TB_Texture()
+{
+
+}
+
+void tbe::TB_Texture::create()
+{
+    glGenTextures(1, &ID);
+}
+
+void tbe::TB_Texture::bindTexture(const std::string path, const int wrapping)
+{
+    glBindTexture(GL_TEXTURE_2D, ID);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapping);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapping);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_set_flip_vertically_on_load(1);
+
+    data = stbi_load(path.c_str(), &width, &height, &normalChannels, 0);
+    if(data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_INT, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Error liading image: " << path << std::endl;
+    }
+
+    stbi_image_free(data);
+}
+
+void tbe::TB_Texture::bindTexture()
+{
+    glBindTexture(GL_TEXTURE_2D, ID);
+}
+
+void tbe::TB_Texture::unbindTexture()
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void tbe::TB_Texture::deleteTexture()
+{
+    glDeleteTextures(1, &ID);
 }

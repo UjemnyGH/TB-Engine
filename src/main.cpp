@@ -67,7 +67,7 @@ int main(int argc, char** argv)
 
 void InitScene()
 {
-    cube.init(tbe::colorFS, tbe::colorVS, GL_DYNAMIC_DRAW, color, sizeof(color));
+    cube.init(tbe::textureFS, tbe::textureVS, "data/textures/textureTest.png", GL_DYNAMIC_DRAW, color, sizeof(color));
 }
 
 void DisplayScene()
